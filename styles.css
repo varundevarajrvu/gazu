@@ -82,6 +82,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   outline: 2px solid var(--color-dark);
   outline-offset: 3px;
 }
+/* dark grounds: a near-black ring on near-black is invisible */
+.announce :focus-visible,
+.categories :focus-visible { outline-color: var(--color-white); }
 
 .skip-link {
   position: absolute; left: -9999px;
@@ -92,7 +95,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 /* ------------------------------ SHARED PIECES ------------------------------ */
 .eyebrow {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   line-height: 1.6;
   letter-spacing: var(--track-eyebrow);
@@ -118,7 +121,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   background: var(--color-dark);
   color: var(--color-white);
   border-radius: 0;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -128,7 +131,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 .link-underline {
   display: inline-block;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -159,7 +162,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 .announce-msg,
 .announce-links {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -221,7 +224,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .nav-primary a:hover,
 .nav-utility a:hover { color: var(--color-dark); background-size: 100% 1px; }
 
-.cart-count { color: var(--color-muted); font-size: 10px; }
+.cart-count { color: var(--color-muted); font-size: 11px; }
 
 .menu-btn { display: none; align-items: center; gap: var(--space-sm); }
 .menu-btn-text {
@@ -264,7 +267,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   display: flex; flex-wrap: wrap; gap: var(--space-md) var(--space-lg);
 }
 .mobile-nav-sub a {
-  font-size: 10px; font-weight: 600;
+  font-size: 11px; font-weight: 600;
   letter-spacing: var(--track-eyebrow); text-transform: uppercase;
   color: var(--color-secondary);
 }
@@ -428,7 +431,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .cat-cta {
   display: inline-block;
   margin-top: var(--space-md);
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -606,7 +609,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 .product-price { color: var(--color-text); }
 .product-swatch {
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-muted);
@@ -725,7 +728,6 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
   /* announcement: keep the delivery promise, drop the secondary links */
   .announce-links { display: none; }
-  .announce-msg { font-size: 8.5px; }
 
   /* header becomes  [MENU]  GAZU  [BAG] */
   .menu-btn { display: inline-flex; }
