@@ -585,8 +585,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 /* -------------------------------- TRANSITION ------------------------------- */
 /* Sand dissolve: script redraws the photo / word on canvases and erases or
-   lays down 3px grains along a noisy left-to-right front. The original stays
-   hidden only while the canvases are on screen (~0.6s). */
+   lays down 1.5–2px grains along a noisy left-to-right front. The original stays
+   hidden only while the canvases are on screen (~1.2s). */
 .grain-layer {
   position: absolute;
   inset: 0;

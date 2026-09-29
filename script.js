@@ -129,7 +129,7 @@
        square grains. A left-to-right gradient, roughened with noise, sets
        when each grain goes: "out" erases grains and lets a share of them
        drift off as specks; "in" lays grains down along the same ragged front. */
-    var GRAIN = 3;                                      // CSS px per grain
+    var GRAIN = 1.5;                                    // CSS px per grain (min 2 device px)
     var DPR = Math.min(window.devicePixelRatio || 1, 2);
 
     // Paint the element's visible content (cover-fitted photo, or the word)
@@ -190,7 +190,11 @@
       // grain grid in whole device pixels, so erased cells leave no seams
       var g = Math.max(2, Math.round(GRAIN * DPR));
       var cols = Math.ceil(W / g), rows = Math.ceil(H / g);
-      var cells = [];
+      // ~70k–130k grains: typed arrays + a bucket sort keep setup to a few ms
+      var n = cols * rows, m = 0, B = 1024;
+      var cx = new Uint16Array(n), cy = new Uint16Array(n);
+      var cpx = new Int32Array(n), cb = new Uint16Array(n);
+      var counts = new Uint32Array(B + 1);
       for (var r = 0; r < rows; r++) {
         for (var c = 0; c < cols; c++) {
           var x = c * g, y = r * g, px = -1;
@@ -200,15 +204,21 @@
             else px = i;
           }
           // the gradient front: mostly position, part noise
-          cells.push({ x: x, y: y, t: 0.68 * (c / cols) + 0.08 * (r / rows) + 0.24 * Math.random(), px: px });
+          var t0 = 0.68 * (c / cols) + 0.08 * (r / rows) + 0.24 * Math.random();
+          var bk = Math.min(B - 1, (t0 * B) | 0);
+          cx[m] = x; cy[m] = y; cpx[m] = px; cb[m] = bk;
+          counts[bk + 1]++;
+          m++;
         }
       }
-      cells.sort(function (a, b) { return a.t - b.t; });
+      for (var q = 1; q <= B; q++) counts[q] += counts[q - 1];
+      var order = new Uint32Array(m);
+      for (var j = 0; j < m; j++) order[counts[cb[j]]++] = j;
 
       var OUT = dir === "out";
       function rgbAt(i) { return "rgb(" + pixels[i] + "," + pixels[i + 1] + "," + pixels[i + 2] + ")"; }
-      var DUR = OUT ? 580 : 540;
-      var SWEEP = OUT ? 0.72 : 1;       // out: grid clears early so specks can finish
+      var DUR = OUT ? 1200 : 1100;
+      var SWEEP = OUT ? 0.7 : 1;        // out: grid clears early so specks can finish
       var specks = [];
       var k = 0;
       var start = null, last = null;
@@ -223,23 +233,24 @@
           var t = Math.min(1, (now - start) / DUR);
           var dt = Math.min(0.05, (now - last) / 1000);
           last = now;
-          var front = Math.min(1, t / SWEEP) * 1.0001;
+          var front = Math.min(1, t / SWEEP) * B;
           var left = DUR * (1 - t);
 
-          while (k < cells.length && cells[k].t <= front) {
-            var cell = cells[k++];
+          while (k < m && cb[order[k]] < front) {
+            var id = order[k++];
+            var gx = cx[id], gy = cy[id], gp = cpx[id];
             if (OUT) {
-              ctx.clearRect(cell.x, cell.y, g, g);
-              if (cell.px >= 0 && Math.random() < 0.32) {
-                specks.push({ x: cell.x, y: cell.y, c: rgbAt(cell.px), age: 0,
-                  life: Math.min(260 + Math.random() * 380, left) / 1000,
-                  vx: (60 + Math.random() * 180) * DPR, vy: (-30 - Math.random() * 70) * DPR });
+              ctx.clearRect(gx, gy, g, g);
+              if (gp >= 0 && Math.random() < 0.16) {
+                specks.push({ x: gx, y: gy, c: rgbAt(gp), age: 0,
+                  life: Math.min(450 + Math.random() * 600, left) / 1000,
+                  vx: (30 + Math.random() * 90) * DPR, vy: (-15 - Math.random() * 40) * DPR });
               }
             } else {
-              ctx.drawImage(src, cell.x, cell.y, g, g, cell.x, cell.y, g, g);
-              if (cell.px >= 0 && Math.random() < 0.1) {
-                specks.push({ x: cell.x - 14 * DPR, y: cell.y - 6 * DPR, c: rgbAt(cell.px), age: 0,
-                  life: 0.18 + Math.random() * 0.14, vx: 70 * DPR, vy: 30 * DPR });
+              ctx.drawImage(src, gx, gy, g, g, gx, gy, g, g);
+              if (gp >= 0 && Math.random() < 0.05) {
+                specks.push({ x: gx - 12 * DPR, y: gy - 5 * DPR, c: rgbAt(gp), age: 0,
+                  life: 0.3 + Math.random() * 0.2, vx: 40 * DPR, vy: 16 * DPR });
               }
             }
           }
@@ -251,7 +262,7 @@
             if (p.age >= p.life) { specks.splice(s, 1); continue; }
             p.x += p.vx * dt;
             p.y += p.vy * dt;
-            p.vy += 140 * DPR * dt;                        // sand falls
+            p.vy += 90 * DPR * dt;                         // sand falls
             fctx.globalAlpha = 1 - p.age / p.life;
             fctx.fillStyle = p.c;
             fctx.fillRect(p.x, p.y, g, g);
