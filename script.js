@@ -138,9 +138,13 @@
       var img = el.querySelector("img");
       if (img) {
         if (!img.complete || !img.naturalWidth) return false;
-        var s = Math.max(w / img.naturalWidth, h / img.naturalHeight);
+        // mirror the CSS object-fit / object-position so grains line up
+        var ics = getComputedStyle(img);
+        var s = (ics.objectFit === "contain" ? Math.min : Math.max)(w / img.naturalWidth, h / img.naturalHeight);
         var dw = img.naturalWidth * s, dh = img.naturalHeight * s;
-        ctx.drawImage(img, (w - dw) / 2, (h - dh) / 2, dw, dh);
+        var op = ics.objectPosition.split(" ");
+        function place(v, free) { return /%$/.test(v) ? free * parseFloat(v) / 100 : parseFloat(v) || 0; }
+        ctx.drawImage(img, place(op[0], w - dw), place(op[1] || "50%", h - dh), dw, dh);
         return true;
       }
       var text = el.firstElementChild;
