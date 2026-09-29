@@ -1,0 +1,745 @@
+/* ==========================================================================
+   GAZU — editorial fashion storefront
+   Monochrome / warm-neutral system. Hierarchy comes from scale, whitespace,
+   typography and photography — not from colour, shadow or decoration.
+   ========================================================================== */
+
+/* ---------------------------------- TOKENS -------------------------------- */
+:root {
+  /* colour */
+  --color-bg:       #E1E0DC;   /* warm off-white — primary page ground */
+  --color-surface:  #F6F5F3;   /* soft ivory — product section */
+  --color-dark:     #0D0D0D;   /* near-black, never pure #000 */
+  --color-text:     #0D0D0D;
+  --color-secondary:#444441;
+  /* Spec says #777672. MEASURED on the actual grounds it is used against, that
+     yields 3.44:1 on --color-bg (cart count, service descriptions) and 4.17:1
+     on --color-surface (product swatch) — all below the 4.5:1 AA floor at
+     9–12px. Darkened one step within the same warm neutral hue: 5.1:1 on
+     --color-bg, 6.2:1 on --color-surface, with the muted role still reading as
+     clearly recessive against --color-secondary. The brief asks for accessible
+     controls as well as this palette; where they conflict, legibility wins. */
+  --color-muted:    #5C5B58;
+  --color-border:   #C9C8C4;
+  --color-white:    #FFFFFF;
+  --color-image:    #BDBCB8;   /* neutral placeholder behind photography */
+
+  /* spacing */
+  --space-xs:  4px;
+  --space-sm:  8px;
+  --space-md:  16px;
+  --space-lg:  24px;
+  --space-xl:  40px;
+  --space-2xl: 72px;
+  --space-3xl: 112px;
+
+  /* layout */
+  --maxw: 1360px;
+  --pad:  5vw;
+  --editorial-h: 330px;
+
+  /* type */
+  --font: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --track-eyebrow: 0.3em;
+
+  /* motion */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur:  200ms;
+}
+
+/* ---------------------------------- RESET --------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+h1, h2, h3, p, ul, li, figure { margin: 0; padding: 0; }
+ul { list-style: none; }
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+
+/* Icons: one consistent thin-line family, no filled backgrounds. */
+.ico {
+  width: 17px; height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex: none;
+}
+.ico-lg { width: 24px; height: 24px; }
+
+:focus-visible {
+  outline: 2px solid var(--color-dark);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute; left: -9999px;
+  background: var(--color-dark); color: var(--color-white);
+  padding: var(--space-sm) var(--space-md); z-index: 100;
+}
+.skip-link:focus { left: var(--space-md); top: var(--space-md); }
+
+/* ------------------------------ SHARED PIECES ------------------------------ */
+.eyebrow {
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: var(--track-eyebrow);
+  text-transform: uppercase;
+  color: var(--color-secondary);
+}
+
+/* thin editorial rule — the recurring magazine detail */
+.rule {
+  display: block;
+  width: 46px;
+  height: 1px;
+  background: var(--color-dark);
+  margin-top: var(--space-md);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+  padding: 0 var(--space-lg);
+  background: var(--color-dark);
+  color: var(--color-white);
+  border-radius: 0;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: background var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.btn:hover { background: #2a2a28; transform: translateY(-1px); }
+
+.link-underline {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-dark);
+  padding-bottom: 3px;
+  background-image: linear-gradient(var(--color-dark), var(--color-dark));
+  background-size: 100% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size var(--dur) var(--ease), opacity var(--dur) var(--ease);
+}
+.link-underline:hover { background-size: 100% 2px; }
+
+/* ---------------------------- ANNOUNCEMENT BAR ----------------------------- */
+.announce {
+  background: var(--color-dark);
+  color: var(--color-white);
+}
+.announce-inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 var(--pad);
+  min-height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+.announce-msg,
+.announce-links {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.announce-links { display: flex; align-items: center; gap: var(--space-sm); }
+.announce-links a { opacity: 0.78; transition: opacity var(--dur) var(--ease); }
+.announce-links a:hover { opacity: 1; }
+.announce-sep { opacity: 0.4; }
+
+/* --------------------------------- HEADER ---------------------------------- */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+/* three-part grid — centres the wordmark without absolute positioning */
+.header-inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: var(--space-md) var(--pad);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--space-md);
+}
+.header-left  { justify-self: start; }
+.header-right { justify-self: end; }
+
+.brand {
+  font-size: 31px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.nav-primary ul,
+.nav-utility ul { display: flex; align-items: center; gap: var(--space-lg); }
+
+.nav-primary a,
+.nav-utility a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-secondary);
+  padding-bottom: 2px;
+  background-image: linear-gradient(var(--color-dark), var(--color-dark));
+  background-size: 0 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: color var(--dur) var(--ease), background-size var(--dur) var(--ease);
+}
+.nav-primary a:hover,
+.nav-utility a:hover { color: var(--color-dark); background-size: 100% 1px; }
+
+.cart-count { color: var(--color-muted); font-size: 10px; }
+
+.menu-btn { display: none; align-items: center; gap: var(--space-sm); }
+.menu-btn-text {
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+
+/* ------------------------------- MOBILE NAV -------------------------------- */
+.mobile-nav {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: var(--color-bg);
+  padding: var(--space-md) var(--pad) var(--space-2xl);
+  display: flex;
+  flex-direction: column;
+  animation: navIn 260ms var(--ease);
+}
+.mobile-nav[hidden] { display: none; }
+@keyframes navIn { from { opacity: 0; transform: translateY(-8px); } }
+
+.mobile-nav-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-bottom: var(--space-xl);
+}
+.mobile-nav-list { margin-top: var(--space-md); }
+.mobile-nav-list a {
+  display: block;
+  padding: var(--space-md) 0;
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+.mobile-nav-sub {
+  margin-top: auto;
+  padding-top: var(--space-xl);
+  border-top: 1px solid var(--color-border);
+  display: flex; flex-wrap: wrap; gap: var(--space-md) var(--space-lg);
+}
+.mobile-nav-sub a {
+  font-size: 10px; font-weight: 600;
+  letter-spacing: var(--track-eyebrow); text-transform: uppercase;
+  color: var(--color-secondary);
+}
+
+/* ---------------------------------- HERO ----------------------------------- */
+.hero {
+  position: relative;
+  background: var(--color-bg);
+  overflow: hidden;
+}
+.hero-inner {
+  position: relative;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 var(--pad);
+  height: 700px;
+}
+
+/* layer 1 — editorial copy, upper left */
+.hero-copy {
+  position: absolute;
+  top: 72px;
+  left: var(--pad);
+  z-index: 3;
+}
+.hero-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.7;
+  letter-spacing: var(--track-eyebrow);
+  text-transform: uppercase;
+  color: var(--color-secondary);
+}
+
+/* layer 2 — the oversized wordmark, functioning as a graphic element */
+.hero-word {
+  position: absolute;
+  left: 50%;
+  bottom: 118px;
+  transform: translateX(-50%);
+  z-index: 1;
+  margin: 0;
+  width: 100%;
+  text-align: center;
+  /* Sized to out-run the figure: the model sits centre-right, so the wordmark
+     must be wide enough that G-A and part of Z still read to its left. At the
+     previous size the figure covered A and Z outright and it read "G  U". */
+  font-size: clamp(70px, 23vw, 286px);
+  font-weight: 800;
+  line-height: 0.8;
+  letter-spacing: -0.055em;
+  text-transform: uppercase;
+  color: var(--color-dark);
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* layer 3 — the model, overlapping the typography */
+.hero-model {
+  position: absolute;
+  bottom: 0;
+  left: 63%;              /* centre-right, per the brief's composition */
+  transform: translateX(-50%);
+  z-index: 2;
+  height: 92%;
+}
+.hero-model img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  object-position: bottom center;
+  /* Integrating a studio shot into flat ground, the hard way round.
+     MEASURED, not assumed: this backdrop runs 163,154,147 (top-left) to
+     209,209,209 (mid-right) against a page of 225,224,220 — a 46-point spread
+     with a heavy vignette. So it cannot be flattened into the page with any
+     uniform brightness value, and the lift needed at the darkest corner would
+     blow out the figure. Multiply alone therefore leaves a visible tinted
+     rectangle, which is what the first two attempts here produced.
+     What works is feathering the boundary instead of chasing the tone:
+       - multiply keeps the dark wordmark readable THROUGH the backdrop, which
+         is the whole point of the overlap composition;
+       - the mask dissolves the edges, so what remains reads as a soft studio
+         vignette behind the model rather than a photograph pasted on top.
+     Bottom edge is left hard: it meets the black category strip, where a fade
+     would be invisible anyway. */
+  filter: brightness(1.13) grayscale(14%);
+  mix-blend-mode: multiply;
+  -webkit-mask-image:
+    linear-gradient(to right, transparent 0%, #000 15%, #000 85%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, #000 18%, #000 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right, transparent 0%, #000 15%, #000 85%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, #000 18%, #000 100%);
+  mask-composite: intersect;
+}
+
+/* layer 4 — foreground controls */
+.hero-actions {
+  position: absolute;
+  left: var(--pad);
+  bottom: 56px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+.hero-collection {
+  position: absolute;
+  right: var(--pad);
+  bottom: 56px;
+  z-index: 3;
+  text-align: right;
+}
+.hero-collection .rule { margin-left: auto; }
+
+/* ------------------------------ CATEGORY STRIP ----------------------------- */
+.categories { background: var(--color-dark); color: var(--color-white); }
+.categories-inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: var(--space-xl) var(--pad);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-xl);
+  min-height: 155px;
+}
+.cat-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  height: 100%;
+}
+.cat-img {
+  width: 72px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 0;
+  /* Strong desaturation here is deliberate: these three photographs come from
+     different shoots, and on a black strip any surviving colour cast reads as
+     inconsistency rather than warmth. */
+  /* Lifted as well as desaturated: two of these three frames are low-key, and
+     unlifted they read as black shapes on a black strip rather than as
+     photographs. */
+  filter: grayscale(88%) contrast(1.02) brightness(1.22);
+  transition: transform var(--dur) var(--ease), opacity var(--dur) var(--ease);
+}
+.cat-title {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+.cat-desc {
+  margin-top: 5px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.64);
+}
+.cat-cta {
+  display: inline-block;
+  margin-top: var(--space-md);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-white);
+}
+.cat-cta .arrow {
+  display: inline-block;
+  margin-left: 5px;
+  transition: transform var(--dur) var(--ease);
+}
+.cat-link:hover .cat-img { transform: scale(1.03); }
+.cat-link:hover .arrow   { transform: translateX(4px); }
+.cat-link:hover .cat-desc { color: rgba(255, 255, 255, 0.82); }
+
+/* --------------------------- NEW SEASON EDITORIAL -------------------------- */
+/* Split composition rather than type-over-photo. The source images are
+   portrait; cover-cropping one to a 320px full-bleed band zooms hard into the
+   face and leaves the headline sitting dark-on-dark. The brief rules out a
+   heavy overlay, which is the usual rescue — so the photograph keeps the right
+   half at its own proportions and the type gets clean ground on the left.
+   Reads full-width, stays legible, no scrim. */
+.editorial {
+  position: relative;
+  height: var(--editorial-h);
+  overflow: hidden;
+  background: var(--color-bg);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  /* Pin the row. Without this the <img>'s intrinsic 1800x2250 ratio sizes the
+     track to ~900px at half-viewport width: the section still clips to its own
+     height, but .editorial-inner stretches to the full track and centres its
+     copy BELOW the clip — invisible text, and an IntersectionObserver that
+     never fires because the element sits outside the painted area. */
+  grid-template-rows: var(--editorial-h);
+}
+.editorial-img {
+  grid-column: 2;
+  grid-row: 1;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: cover;
+  /* Anchored high: at a 330px band this source otherwise slices straight
+     through the face, which is the one crop worse than losing the head
+     entirely. */
+  object-position: 50% 11%;
+  filter: grayscale(35%) contrast(1.04);
+}
+.editorial-inner {
+  grid-column: 1;
+  grid-row: 1;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 var(--space-xl) 0 var(--pad);
+}
+.editorial-copy { max-width: 340px; }
+.editorial-title {
+  margin-top: var(--space-sm);
+  font-size: clamp(38px, 5vw, 56px);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+.editorial-desc {
+  margin: var(--space-md) 0 var(--space-lg);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-secondary);
+}
+
+/* ------------------------------ SERVICE STRIP ------------------------------ */
+.services { background: var(--color-bg); }
+.services-inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: var(--space-2xl) var(--pad);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-xl);
+}
+.service {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+.service .ico { color: var(--color-dark); }
+.service-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.service-desc {
+  margin-top: 3px;
+  font-size: 12px;
+  color: var(--color-muted);
+  line-height: 1.5;
+}
+
+/* -------------------------------- PRODUCTS --------------------------------- */
+.products { background: var(--color-surface); }
+.products-inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: var(--space-3xl) var(--pad);
+}
+.products-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-xl);
+}
+.products-title {
+  font-size: clamp(30px, 4vw, 52px);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-md);
+}
+.product-media {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--color-image);
+}
+.product-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(8%);
+  transition: transform 380ms var(--ease);
+}
+.product-link:hover .product-media img { transform: scale(1.035); }
+
+.wish {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  width: 28px; height: 28px;
+  display: grid; place-items: center;
+  background: rgba(246, 245, 243, 0.82);
+  color: var(--color-dark);
+  opacity: 0.72;
+  transition: opacity var(--dur) var(--ease);
+}
+.wish .ico { width: 15px; height: 15px; }
+.product-link:hover .wish { opacity: 1; }
+
+.product-info { padding-top: var(--space-md); }
+.product-name {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.4;
+}
+.product-meta {
+  margin-top: 4px;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  font-size: 12px;
+}
+.product-price { color: var(--color-text); }
+.product-swatch {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+/* ------------------------------ SCROLL REVEAL ------------------------------ */
+/* Grouped per component, never per element — see script.js.
+   Gated on .js (set inline in <head>) so the hidden start state only exists
+   when there is script to undo it. Without JavaScript the rules below never
+   match and every section renders normally. */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 600ms var(--ease), transform 600ms var(--ease);
+}
+.js .reveal.is-in { opacity: 1; transform: none; }
+
+/* ================================ TABLET ================================== */
+@media (max-width: 1199px) {
+  :root { --pad: 36px; }
+
+  .hero-inner { height: 600px; }
+  .hero-word  { font-size: clamp(90px, 17vw, 170px); bottom: 122px; }
+  .hero-model { height: 80%; }
+
+  .nav-primary ul, .nav-utility ul { gap: var(--space-md); }
+  .u-label { display: none; }
+
+  .categories-inner { gap: var(--space-lg); }
+  .cat-link { gap: var(--space-md); }
+  .cat-desc { font-size: 11px; }
+
+  .product-grid { grid-template-columns: repeat(2, 1fr); }
+  .services-inner { padding: var(--space-xl) var(--pad); }
+}
+
+/* ================================ MOBILE ================================== */
+@media (max-width: 767px) {
+  :root { --pad: 20px; --space-3xl: 64px; --space-2xl: 48px; }
+
+  /* announcement: keep the delivery promise, drop the secondary links */
+  .announce-links { display: none; }
+  .announce-msg { font-size: 8.5px; }
+
+  /* header becomes  [MENU]  GAZU  [BAG] */
+  .menu-btn { display: inline-flex; }
+  .nav-primary { display: none; }
+  .brand { font-size: 25px; }
+  .nav-utility li:not(:last-child) { display: none; }
+  .u-label { display: none; }
+
+  /* hero recomposed, not merely scaled: copy, wordmark, model, then CTA */
+  .hero-inner {
+    height: auto;
+    padding: var(--space-xl) var(--pad) var(--space-2xl);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 580px;
+  }
+  .hero-copy,
+  .hero-word,
+  .hero-model,
+  .hero-actions,
+  .hero-collection {
+    position: static;
+    transform: none;
+  }
+  .hero-word {
+    width: auto;
+    text-align: left;
+    margin: var(--space-xl) 0 var(--space-md);
+    font-size: clamp(64px, 23vw, 104px);
+    letter-spacing: -0.05em;
+  }
+  .hero-model {
+    height: auto;
+    align-self: center;
+    max-width: 78%;
+    margin-bottom: var(--space-xl);
+  }
+  .hero-model img { height: auto; width: 100%; }
+  .hero-actions { margin-bottom: var(--space-xl); }
+  .hero-collection { text-align: left; }
+  .hero-collection .rule { margin-left: 0; }
+
+  /* categories: horizontal scroll preserves the editorial density */
+  .categories-inner {
+    display: flex;
+    gap: var(--space-xl);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: var(--space-xl) var(--pad);
+  }
+  .categories-inner::-webkit-scrollbar { display: none; }
+  .categories-inner { scrollbar-width: none; }
+  .cat { flex: 0 0 74%; scroll-snap-align: start; }
+
+  /* editorial: stacked — image, then copy (brief §18) */
+  .editorial {
+    height: auto;
+    grid-template-columns: 1fr;
+    grid-template-rows: 300px auto;
+  }
+  .editorial-img {
+    grid-column: 1;
+    grid-row: 1;
+    height: 300px;
+    object-position: 50% 22%;
+  }
+  .editorial-inner {
+    grid-column: 1;
+    grid-row: 2;
+    height: auto;
+    padding: var(--space-xl) var(--pad) var(--space-2xl);
+  }
+  .editorial-copy { max-width: none; }
+
+  .services-inner { grid-template-columns: repeat(2, 1fr); gap: var(--space-lg); }
+  .service { align-items: flex-start; }
+
+  .product-grid { gap: 11px; }
+  .products-head { align-items: flex-end; margin-bottom: var(--space-lg); }
+}
+
+/* --------------------------- REDUCED MOTION -------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}

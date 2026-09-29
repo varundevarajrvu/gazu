@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GAZU — Fashion That Moves With You</title>
+<meta name="description" content="GAZU — contemporary clothing. Elevated everyday essentials for men, women and kids. New collection 2024.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230D0D0D'/%3E%3Ctext x='16' y='22' font-family='Helvetica,Arial' font-size='15' font-weight='700' fill='%23fff' text-anchor='middle'%3EG%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+<!-- Marks the document as scripted BEFORE first paint. The reveal animation
+     starts from opacity:0, so it must be gated on this class — otherwise a
+     visitor with JavaScript disabled gets a page of invisible content. Inline
+     and synchronous on purpose: a deferred or external script would let the
+     hidden state paint first. -->
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ===================== ANNOUNCEMENT BAR ===================== -->
+<div class="announce">
+  <div class="announce-inner">
+    <p class="announce-msg">Free delivery on orders above &#8377;999</p>
+    <ul class="announce-links">
+      <li><a href="#">Download app</a></li>
+      <li aria-hidden="true" class="announce-sep">|</li>
+      <li><a href="#">Track order</a></li>
+      <li aria-hidden="true" class="announce-sep">|</li>
+      <li><a href="#">Help</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===================== HEADER / NAV ===================== -->
+<header class="header" id="header">
+  <div class="header-inner">
+
+    <!-- left: primary nav (desktop) / menu button (mobile) -->
+    <div class="header-left">
+      <button class="icon-btn menu-btn" type="button" id="menuBtn" aria-expanded="false" aria-controls="mobileNav">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        <span class="menu-btn-text">Menu</span>
+      </button>
+      <nav class="nav-primary" aria-label="Primary">
+        <ul>
+          <li><a href="#">Men</a></li>
+          <li><a href="#">Women</a></li>
+          <li><a href="#">Kids</a></li>
+          <li><a href="#">Beauty</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- centre: wordmark -->
+    <a class="brand" href="#top">Gazu</a>
+
+    <!-- right: utility nav -->
+    <div class="header-right">
+      <nav class="nav-utility" aria-label="Utility">
+        <ul>
+          <li><a href="#" aria-label="Search">
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <span class="u-label">Search</span>
+          </a></li>
+          <li><a href="#" aria-label="Login">
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+            <span class="u-label">Login</span>
+          </a></li>
+          <li class="u-hide-sm"><a href="#" aria-label="Wishlist">
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.5-7-9.5A3.8 3.8 0 0 1 12 8a3.8 3.8 0 0 1 7 2.5C19 15.5 12 20 12 20Z"/></svg>
+            <span class="u-label">Wishlist</span>
+          </a></li>
+          <li><a href="#" aria-label="Cart, 0 items">
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12H7L6 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+            <span class="u-label">Cart</span><span class="cart-count">(0)</span>
+          </a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== MOBILE NAV OVERLAY ===================== -->
+<div class="mobile-nav" id="mobileNav" hidden>
+  <div class="mobile-nav-head">
+    <span class="eyebrow">Menu</span>
+    <button class="icon-btn" type="button" id="menuClose" aria-label="Close menu">
+      <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+  <nav aria-label="Mobile">
+    <ul class="mobile-nav-list">
+      <li><a href="#">Men</a></li>
+      <li><a href="#">Women</a></li>
+      <li><a href="#">Kids</a></li>
+      <li><a href="#">Beauty</a></li>
+    </ul>
+  </nav>
+  <ul class="mobile-nav-sub">
+    <li><a href="#">Search</a></li>
+    <li><a href="#">Login</a></li>
+    <li><a href="#">Wishlist</a></li>
+    <li><a href="#">Track order</a></li>
+    <li><a href="#">Help</a></li>
+  </ul>
+</div>
+
+<main id="main">
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero" id="top">
+    <div class="hero-inner">
+
+      <div class="hero-copy reveal">
+        <p class="hero-eyebrow">Fashion<br>that moves<br>with you.</p>
+        <span class="rule" aria-hidden="true"></span>
+      </div>
+
+      <h1 class="hero-word" aria-label="Gazu">Gazu</h1>
+
+      <div class="hero-model">
+        <img src="assets/hero.jpg" alt="Model wearing an oversized black blazer and boots against a pale studio backdrop." loading="eager" width="1400" height="1867">
+      </div>
+
+      <div class="hero-actions reveal">
+        <a class="btn" href="#products">Shop now</a>
+        <a class="link-underline" href="#new-season">Explore new in</a>
+      </div>
+
+      <div class="hero-collection reveal">
+        <p class="eyebrow">New<br>Collection<br>2024</p>
+        <span class="rule" aria-hidden="true"></span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================== CATEGORY STRIP ===================== -->
+  <section class="categories" aria-label="Shop by category">
+    <div class="categories-inner">
+
+      <article class="cat reveal">
+        <a class="cat-link" href="#">
+          <img class="cat-img" src="assets/cat-men.jpg" alt="" loading="lazy" width="500" height="680">
+          <div class="cat-body">
+            <h2 class="cat-title">Men</h2>
+            <p class="cat-desc">Elevated everyday essentials.</p>
+            <span class="cat-cta">Shop men <span class="arrow" aria-hidden="true">&rarr;</span></span>
+          </div>
+        </a>
+      </article>
+
+      <article class="cat reveal">
+        <a class="cat-link" href="#">
+          <img class="cat-img" src="assets/cat-women.jpg" alt="" loading="lazy" width="500" height="680">
+          <div class="cat-body">
+            <h2 class="cat-title">Women</h2>
+            <p class="cat-desc">Effortless style for every you.</p>
+            <span class="cat-cta">Shop women <span class="arrow" aria-hidden="true">&rarr;</span></span>
+          </div>
+        </a>
+      </article>
+
+      <article class="cat reveal">
+        <a class="cat-link" href="#">
+          <img class="cat-img" src="assets/cat-kids.jpg" alt="" loading="lazy" width="500" height="680">
+          <div class="cat-body">
+            <h2 class="cat-title">Kids</h2>
+            <p class="cat-desc">Comfort meets cool everyday.</p>
+            <span class="cat-cta">Shop kids <span class="arrow" aria-hidden="true">&rarr;</span></span>
+          </div>
+        </a>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ===================== NEW SEASON EDITORIAL ===================== -->
+  <section class="editorial" id="new-season">
+    <img class="editorial-img" src="assets/banner.jpg" alt="Model in a grey wool suit against a pale studio backdrop." loading="lazy" width="1800" height="2250">
+    <div class="editorial-inner">
+      <div class="editorial-copy reveal">
+        <p class="eyebrow">New season</p>
+        <h2 class="editorial-title">New<br>Vibes</h2>
+        <p class="editorial-desc">Discover everything<br>new and now.</p>
+        <a class="btn" href="#products">Explore collection</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SERVICE / TRUST STRIP ===================== -->
+  <section class="services" aria-label="Store services">
+    <ul class="services-inner">
+      <li class="service reveal">
+        <svg class="ico ico-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 7h11v9H2zM13 10h4.5L21 13v3h-8z"/><circle cx="6" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg>
+        <div>
+          <h3 class="service-title">Fast delivery</h3>
+          <p class="service-desc">Quick &amp; safe delivery</p>
+        </div>
+      </li>
+      <li class="service reveal">
+        <svg class="ico ico-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4.2v9.6L12 21l-8-4.2V7.2z"/><path d="m4.2 7.4 7.8 4 7.8-4M12 11.4V21"/></svg>
+        <div>
+          <h3 class="service-title">Easy returns</h3>
+          <p class="service-desc">Within 15 days</p>
+        </div>
+      </li>
+      <li class="service reveal">
+        <svg class="ico ico-lg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="10" r="6"/><path d="m8.5 15.5-1 6 4.5-2.4 4.5 2.4-1-6M9.6 10l1.7 1.7 3.2-3.2"/></svg>
+        <div>
+          <h3 class="service-title">Quality assured</h3>
+          <p class="service-desc">Best fashion, best quality</p>
+        </div>
+      </li>
+      <li class="service reveal">
+        <svg class="ico ico-lg" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="1"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+        <div>
+          <h3 class="service-title">Secure payment</h3>
+          <p class="service-desc">100% secure checkout</p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ===================== BEST OF GAZU ===================== -->
+  <section class="products" id="products">
+    <div class="products-inner">
+
+      <div class="products-head reveal">
+        <h2 class="products-title">Best of Gazu</h2>
+        <a class="link-underline" href="#">View all</a>
+      </div>
+
+      <ul class="product-grid">
+
+        <li class="product reveal">
+          <a class="product-link" href="#">
+            <div class="product-media">
+              <img src="assets/p1.jpg" alt="Structured black top and tailored trousers." loading="lazy" width="800" height="1000">
+              <span class="wish" aria-hidden="true">
+                <svg class="ico" viewBox="0 0 24 24"><path d="M12 20s-7-4.5-7-9.5A3.8 3.8 0 0 1 12 8a3.8 3.8 0 0 1 7 2.5C19 15.5 12 20 12 20Z"/></svg>
+              </span>
+            </div>
+            <div class="product-info">
+              <h3 class="product-name">Tailored Column Trouser</h3>
+              <p class="product-meta"><span class="product-price">&#8377;3,290</span><span class="product-swatch">Black</span></p>
+            </div>
+          </a>
+        </li>
+
+        <li class="product reveal">
+          <a class="product-link" href="#">
+            <div class="product-media">
+              <img src="assets/p2.jpg" alt="Long line neutral overcoat." loading="lazy" width="800" height="1000">
+              <span class="wish" aria-hidden="true">
+                <svg class="ico" viewBox="0 0 24 24"><path d="M12 20s-7-4.5-7-9.5A3.8 3.8 0 0 1 12 8a3.8 3.8 0 0 1 7 2.5C19 15.5 12 20 12 20Z"/></svg>
+              </span>
+            </div>
+            <div class="product-info">
+              <h3 class="product-name">Longline Wool Coat</h3>
+              <p class="product-meta"><span class="product-price">&#8377;7,450</span><span class="product-swatch">Stone</span></p>
+            </div>
+          </a>
+        </li>
+
+        <li class="product reveal">
+          <a class="product-link" href="#">
+            <div class="product-media">
+              <img src="assets/p3.jpg" alt="Relaxed brown shirt with black trousers." loading="lazy" width="800" height="1000">
+              <span class="wish" aria-hidden="true">
+                <svg class="ico" viewBox="0 0 24 24"><path d="M12 20s-7-4.5-7-9.5A3.8 3.8 0 0 1 12 8a3.8 3.8 0 0 1 7 2.5C19 15.5 12 20 12 20Z"/></svg>
+              </span>
+            </div>
+            <div class="product-info">
+              <h3 class="product-name">Relaxed Camp Shirt</h3>
+              <p class="product-meta"><span class="product-price">&#8377;2,180</span><span class="product-swatch">Clay</span></p>
+            </div>
+          </a>
+        </li>
+
+        <li class="product reveal">
+          <a class="product-link" href="#">
+            <div class="product-media">
+              <img src="assets/p4.jpg" alt="Minimal white slip dress." loading="lazy" width="800" height="1000">
+              <span class="wish" aria-hidden="true">
+                <svg class="ico" viewBox="0 0 24 24"><path d="M12 20s-7-4.5-7-9.5A3.8 3.8 0 0 1 12 8a3.8 3.8 0 0 1 7 2.5C19 15.5 12 20 12 20Z"/></svg>
+              </span>
+            </div>
+            <div class="product-info">
+              <h3 class="product-name">Bias Slip Dress</h3>
+              <p class="product-meta"><span class="product-price">&#8377;4,120</span><span class="product-swatch">Ivory</span></p>
+            </div>
+          </a>
+        </li>
+
+        <li class="product reveal">
+          <a class="product-link" href="#">
+            <div class="product-media">
+              <img src="assets/p5.jpg" alt="Black tailored jacket worn open against a grey studio wall." loading="lazy" width="800" height="1200">
+              <span class="wish" aria-hidden="true">
+                <svg class="ico" viewBox="0 0 24 24"><path d="M12 20s-7-4.5-7-9.5A3.8 3.8 0 0 1 12 8a3.8 3.8 0 0 1 7 2.5C19 15.5 12 20 12 20Z"/></svg>
+              </span>
+            </div>
+            <div class="product-info">
+              <h3 class="product-name">Soft Tailored Jacket</h3>
+              <p class="product-meta"><span class="product-price">&#8377;6,240</span><span class="product-swatch">Onyx</span></p>
+            </div>
+          </a>
+        </li>
+
+        <li class="product reveal">
+          <a class="product-link" href="#">
+            <div class="product-media">
+              <img src="assets/p6.jpg" alt="Monochrome crew neck t-shirt." loading="lazy" width="800" height="1000">
+              <span class="wish" aria-hidden="true">
+                <svg class="ico" viewBox="0 0 24 24"><path d="M12 20s-7-4.5-7-9.5A3.8 3.8 0 0 1 12 8a3.8 3.8 0 0 1 7 2.5C19 15.5 12 20 12 20Z"/></svg>
+              </span>
+            </div>
+            <div class="product-info">
+              <h3 class="product-name">Heavy Cotton Tee</h3>
+              <p class="product-meta"><span class="product-price">&#8377;1,290</span><span class="product-swatch">Off White</span></p>
+            </div>
+          </a>
+        </li>
+
+        <li class="product reveal">
+          <a class="product-link" href="#">
+            <div class="product-media">
+              <img src="assets/p7.jpg" alt="Sharp shouldered black blazer." loading="lazy" width="800" height="1000">
+              <span class="wish" aria-hidden="true">
+                <svg class="ico" viewBox="0 0 24 24"><path d="M12 20s-7-4.5-7-9.5A3.8 3.8 0 0 1 12 8a3.8 3.8 0 0 1 7 2.5C19 15.5 12 20 12 20Z"/></svg>
+              </span>
+            </div>
+            <div class="product-info">
+              <h3 class="product-name">Sharp Shoulder Blazer</h3>
+              <p class="product-meta"><span class="product-price">&#8377;5,980</span><span class="product-swatch">Black</span></p>
+            </div>
+          </a>
+        </li>
+
+        <li class="product reveal">
+          <a class="product-link" href="#">
+            <div class="product-media">
+              <img src="assets/p8.jpg" alt="Sleeveless denim overshirt." loading="lazy" width="800" height="1000">
+              <span class="wish" aria-hidden="true">
+                <svg class="ico" viewBox="0 0 24 24"><path d="M12 20s-7-4.5-7-9.5A3.8 3.8 0 0 1 12 8a3.8 3.8 0 0 1 7 2.5C19 15.5 12 20 12 20Z"/></svg>
+              </span>
+            </div>
+            <div class="product-info">
+              <h3 class="product-name">Cut Off Denim Overshirt</h3>
+              <p class="product-meta"><span class="product-price">&#8377;3,540</span><span class="product-swatch">Washed Indigo</span></p>
+            </div>
+          </a>
+        </li>
+
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
