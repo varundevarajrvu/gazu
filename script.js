@@ -68,7 +68,7 @@
   /* Autoplay advances when the progress bar's CSS animation ends, so pausing
      is just animation-play-state — no timers to keep in sync. It pauses while
      the viewer hovers, focuses inside, opens a product, scrolls away, or
-     presses Pause; reduced-motion users get no autoplay and no glitch. */
+     presses Pause; reduced-motion users get no autoplay and no dissolve. */
   var heroEl = document.querySelector("[data-hero]");
   if (heroEl) initHero(heroEl);
 
@@ -125,49 +125,145 @@
       restartProgress();
     }
 
-    /* Glitch: copy the element's content into N horizontal strips and shear
-       them sideways. "out" tears the image apart, "in" pulls it together. */
-    var STRIPS = 9;
-    function glitch(el, dir) {
-      if (!el.animate) return Promise.resolve();
-      var layer = document.createElement("div");
-      layer.className = "glitch-layer";
-      layer.setAttribute("aria-hidden", "true");
-      var w = el.offsetWidth || 200;
-      var anims = [];
-      for (var i = 0; i < STRIPS; i++) {
-        var strip = document.createElement("div");
-        strip.className = "glitch-strip";
-        var top = (i * 100) / STRIPS;
-        var bottom = 100 - ((i + 1) * 100) / STRIPS;
-        strip.style.clipPath = "inset(" + top + "% 0 " + bottom + "% 0)";
-        strip.innerHTML = el.innerHTML;
-        layer.appendChild(strip);
+    /* Sand dissolve: the element is redrawn on a canvas and cut into tiny
+       square grains. A left-to-right gradient, roughened with noise, sets
+       when each grain goes: "out" erases grains and lets a share of them
+       drift off as specks; "in" lays grains down along the same ragged front. */
+    var GRAIN = 3;                                      // CSS px per grain
+    var DPR = Math.min(window.devicePixelRatio || 1, 2);
 
-        var dx  = (Math.random() * 2 - 1) * w * 0.16;
-        var dx2 = dx * (1.8 + Math.random());
-        var frames = [
-          { transform: "translateX(0)", opacity: 1 },
-          { transform: "translateX(" + dx + "px)", opacity: 1, offset: 0.35 },
-          { transform: "translateX(" + dx2 + "px)", opacity: 0 }
-        ];
-        if (dir === "in") frames = frames.reverse().map(function (f, k) {
-          var g = { transform: f.transform, opacity: f.opacity };
-          if (k === 1) g.offset = 0.65;
-          return g;
-        });
-        anims.push(strip.animate(frames, {
-          duration: 380,
-          delay: Math.random() * 140,
-          easing: "cubic-bezier(0.22, 0.61, 0.36, 1)",
-          fill: "both"
-        }));
+    // Paint the element's visible content (cover-fitted photo, or the word)
+    // onto ctx in device pixels. Returns false if there is nothing to paint yet.
+    function paintSource(ctx, el, w, h) {
+      var img = el.querySelector("img");
+      if (img) {
+        if (!img.complete || !img.naturalWidth) return false;
+        var s = Math.max(w / img.naturalWidth, h / img.naturalHeight);
+        var dw = img.naturalWidth * s, dh = img.naturalHeight * s;
+        ctx.drawImage(img, (w - dw) / 2, (h - dh) / 2, dw, dh);
+        return true;
       }
+      var text = el.firstElementChild;
+      if (!text) return false;
+      var cs = getComputedStyle(text);
+      var box = el.getBoundingClientRect();
+      var probe = document.createElement("span");       // sits on the baseline
+      probe.style.cssText = "display:inline-block;width:0;height:0;vertical-align:baseline";
+      text.appendChild(probe);
+      var pr = probe.getBoundingClientRect();
+      text.removeChild(probe);
+      var range = document.createRange();
+      range.selectNodeContents(text);
+      ctx.font = cs.fontWeight + " " + cs.fontSize + " " + cs.fontFamily;
+      if ("letterSpacing" in ctx) ctx.letterSpacing = cs.letterSpacing;
+      ctx.fillStyle = cs.color;
+      ctx.textBaseline = "alphabetic";
+      ctx.fillText(text.textContent, range.getBoundingClientRect().left - box.left, pr.bottom - box.top);
+      return true;
+    }
+
+    function dissolve(el, dir) {
+      var w = el.offsetWidth, h = el.offsetHeight;
+      if (!w || !h || !window.requestAnimationFrame) return Promise.resolve();
+
+      var W = Math.round(w * DPR), H = Math.round(h * DPR);
+      var src = document.createElement("canvas");
+      src.width = W; src.height = H;
+      var sctx = src.getContext("2d");
+      sctx.scale(DPR, DPR);
+      if (!paintSource(sctx, el, w, h)) return Promise.resolve();
+
+      var pixels = null;
+      try { pixels = sctx.getImageData(0, 0, W, H).data; } catch (e) { /* tainted: no specks */ }
+
+      var layer = document.createElement("canvas");     // the grains that stay
+      var fx = document.createElement("canvas");        // the grains in flight
+      [layer, fx].forEach(function (c) {
+        c.className = "grain-layer";
+        c.setAttribute("aria-hidden", "true");
+        c.width = W; c.height = H;
+      });
+      var ctx = layer.getContext("2d");
+      var fctx = fx.getContext("2d");
+      if (dir === "out") ctx.drawImage(src, 0, 0);
+
+      // grain grid in whole device pixels, so erased cells leave no seams
+      var g = Math.max(2, Math.round(GRAIN * DPR));
+      var cols = Math.ceil(W / g), rows = Math.ceil(H / g);
+      var cells = [];
+      for (var r = 0; r < rows; r++) {
+        for (var c = 0; c < cols; c++) {
+          var x = c * g, y = r * g, px = -1;
+          if (pixels) {
+            var i = ((Math.min(y + (g >> 1), H - 1) * W) + Math.min(x + (g >> 1), W - 1)) * 4;
+            if (pixels[i + 3] < 24) { if (dir === "in") continue; } // empty space: nothing to lay down
+            else px = i;
+          }
+          // the gradient front: mostly position, part noise
+          cells.push({ x: x, y: y, t: 0.68 * (c / cols) + 0.08 * (r / rows) + 0.24 * Math.random(), px: px });
+        }
+      }
+      cells.sort(function (a, b) { return a.t - b.t; });
+
+      var OUT = dir === "out";
+      function rgbAt(i) { return "rgb(" + pixels[i] + "," + pixels[i + 1] + "," + pixels[i + 2] + ")"; }
+      var DUR = OUT ? 580 : 540;
+      var SWEEP = OUT ? 0.72 : 1;       // out: grid clears early so specks can finish
+      var specks = [];
+      var k = 0;
+      var start = null, last = null;
+
       el.appendChild(layer);
-      el.classList.add("is-glitching");
-      return Promise.all(anims.map(function (a) { return a.finished; })).then(function () {
-        layer.remove();
-        el.classList.remove("is-glitching");
+      el.appendChild(fx);
+      el.classList.add("is-dissolving");
+
+      return new Promise(function (resolve) {
+        function frame(now) {
+          if (start === null) { start = last = now; }
+          var t = Math.min(1, (now - start) / DUR);
+          var dt = Math.min(0.05, (now - last) / 1000);
+          last = now;
+          var front = Math.min(1, t / SWEEP) * 1.0001;
+          var left = DUR * (1 - t);
+
+          while (k < cells.length && cells[k].t <= front) {
+            var cell = cells[k++];
+            if (OUT) {
+              ctx.clearRect(cell.x, cell.y, g, g);
+              if (cell.px >= 0 && Math.random() < 0.32) {
+                specks.push({ x: cell.x, y: cell.y, c: rgbAt(cell.px), age: 0,
+                  life: Math.min(260 + Math.random() * 380, left) / 1000,
+                  vx: (60 + Math.random() * 180) * DPR, vy: (-30 - Math.random() * 70) * DPR });
+              }
+            } else {
+              ctx.drawImage(src, cell.x, cell.y, g, g, cell.x, cell.y, g, g);
+              if (cell.px >= 0 && Math.random() < 0.1) {
+                specks.push({ x: cell.x - 14 * DPR, y: cell.y - 6 * DPR, c: rgbAt(cell.px), age: 0,
+                  life: 0.18 + Math.random() * 0.14, vx: 70 * DPR, vy: 30 * DPR });
+              }
+            }
+          }
+
+          fctx.clearRect(0, 0, W, H);
+          for (var s = specks.length - 1; s >= 0; s--) {
+            var p = specks[s];
+            p.age += dt;
+            if (p.age >= p.life) { specks.splice(s, 1); continue; }
+            p.x += p.vx * dt;
+            p.y += p.vy * dt;
+            p.vy += 140 * DPR * dt;                        // sand falls
+            fctx.globalAlpha = 1 - p.age / p.life;
+            fctx.fillStyle = p.c;
+            fctx.fillRect(p.x, p.y, g, g);
+          }
+
+          if (t < 1) { requestAnimationFrame(frame); return; }
+          layer.remove();
+          fx.remove();
+          el.classList.remove("is-dissolving");
+          resolve();
+        }
+        requestAnimationFrame(frame);
       });
     }
 
@@ -192,7 +288,7 @@
         syncChrome();
         if (reduced) { busy = false; return; }
         next.classList.add("is-entering");
-        Promise.all(targets(next).map(function (el) { return glitch(el, "in"); })).then(function () {
+        Promise.all(targets(next).map(function (el) { return dissolve(el, "in"); })).then(function () {
           next.classList.remove("is-entering");
           busy = false;
         });
@@ -200,7 +296,7 @@
 
       if (reduced) { swap(); return; }
       from.classList.add("is-leaving");
-      Promise.all(targets(from).map(function (el) { return glitch(el, "out"); })).then(swap);
+      Promise.all(targets(from).map(function (el) { return dissolve(el, "out"); })).then(swap);
     }
 
     /* size picker */

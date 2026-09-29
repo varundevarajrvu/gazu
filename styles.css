@@ -584,12 +584,18 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .hero-next:hover .ico { transform: translateX(4px); }
 
 /* -------------------------------- TRANSITION ------------------------------- */
-/* Glitch-slice swap: script copies an element into horizontal strips and
-   shears them apart (out) or together (in). The original stays hidden only
-   for the ~0.5s the strips are on screen. */
-.glitch-layer { position: absolute; inset: 0; pointer-events: none; }
-.glitch-strip { position: absolute; inset: 0; }
-.is-glitching > :not(.glitch-layer) { visibility: hidden; }
+/* Sand dissolve: script redraws the photo / word on canvases and erases or
+   lays down 3px grains along a noisy left-to-right front. The original stays
+   hidden only while the canvases are on screen (~0.6s). */
+.grain-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.is-dissolving > :not(.grain-layer) { visibility: hidden; }
+.slide-media.is-dissolving { background: transparent; }   /* grains scatter over the page, not a grey box */
 
 .slide.is-leaving .product-card { opacity: 0; transform: translateY(-8px); }
 .slide.is-entering .product-card { animation: cardIn 420ms var(--ease) both; }
