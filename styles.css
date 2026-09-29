@@ -612,6 +612,82 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   color: var(--color-muted);
 }
 
+/* --------------------------------- FOOTER ---------------------------------- */
+/* Closes the page on the same near-black as the category strip. Muted text
+   stays at white/0.64 or above (≈8:1 on --color-dark); nothing below 11px.
+   Its responsive rules live here, not in the shared breakpoints below, so the
+   footer stays one self-contained block. */
+.footer { background: var(--color-dark); color: var(--color-white); }
+.footer-inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: var(--space-2xl) var(--pad) var(--space-xl);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-2xl) var(--space-xl);
+}
+.footer-tagline {
+  margin-top: var(--space-md);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.7;
+  letter-spacing: var(--track-eyebrow);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.64);
+}
+.footer .rule { background: var(--color-white); }
+
+.footer-nav {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(160px, auto));
+  gap: var(--space-xl) var(--space-3xl);
+}
+.footer-heading {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: var(--track-eyebrow);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.64);
+  padding-bottom: var(--space-md);
+  margin-bottom: var(--space-md);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+}
+.footer-links { display: grid; gap: var(--space-sm); }
+.footer-links a {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding-bottom: 2px;
+  background-image: linear-gradient(var(--color-white), var(--color-white));
+  background-size: 0 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size var(--dur) var(--ease);
+}
+.footer-links a:hover { background-size: 100% 1px; }
+
+.footer-legal {
+  grid-column: 1 / -1;
+  padding-top: var(--space-lg);
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.64);
+}
+
+/* the global ring is --color-dark, invisible on this ground */
+.footer :focus-visible { outline-color: var(--color-white); }
+
+@media (max-width: 767px) {
+  .footer-inner { grid-template-columns: 1fr; gap: var(--space-xl); }
+  .footer-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-lg); }
+}
+
 /* ------------------------------ SCROLL REVEAL ------------------------------ */
 /* Grouped per component, never per element — see script.js.
    Gated on .js (set inline in <head>) so the hidden start state only exists
