@@ -739,7 +739,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   /* hero recomposed, not merely scaled: copy, wordmark, model, then CTA */
   .hero-inner {
     height: auto;
-    padding: var(--space-xl) var(--pad) var(--space-2xl);
+    padding: var(--space-lg) var(--pad) var(--space-2xl);
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -756,15 +756,19 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .hero-word {
     width: auto;
     text-align: left;
-    margin: var(--space-xl) 0 var(--space-md);
+    margin: var(--space-lg) 0 var(--space-md);
     font-size: clamp(64px, 23vw, 104px);
     letter-spacing: -0.05em;
   }
   .hero-model {
     height: auto;
     align-self: center;
-    max-width: 78%;
-    margin-bottom: var(--space-xl);
+    /* Sized so "Shop now" lands in the first viewport down to 360x740.
+       The CTA is a .reveal, and script.js only reveals it once its top clears
+       the bottom 12% of the viewport, so "on screen" is not enough: it has
+       to sit above ~88% of the viewport height or it stays at opacity 0. */
+    max-width: 70%;
+    margin-bottom: var(--space-lg);
   }
   .hero-model img { height: auto; width: 100%; }
   .hero-actions { margin-bottom: var(--space-xl); }
