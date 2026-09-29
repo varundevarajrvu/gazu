@@ -74,7 +74,7 @@
             <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.5-7-9.5A3.8 3.8 0 0 1 12 8a3.8 3.8 0 0 1 7 2.5C19 15.5 12 20 12 20Z"/></svg>
             <span class="u-label">Wishlist</span>
           </a></li>
-          <li><a href="#" aria-label="Cart, 0 items">
+          <li><a href="#" aria-label="Cart, 0 items" data-cart>
             <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l-1 12H7L6 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
             <span class="u-label">Cart</span><span class="cart-count">(0)</span>
           </a></li>
@@ -111,30 +111,144 @@
 
 <main id="main">
 
-  <!-- ===================== HERO ===================== -->
-  <section class="hero" id="top">
+  <!-- ===================== HERO — FEATURED PRODUCT CAROUSEL ===================== -->
+  <!-- One product per domain. Slide 1 is the no-JS state; script.js reveals the
+       others, runs the glitch transition and the size picker. -->
+  <section class="hero" id="top" data-hero aria-roledescription="carousel" aria-label="Featured products">
     <div class="hero-inner">
 
-      <div class="hero-copy reveal">
-        <p class="hero-eyebrow">Fashion<br>that moves<br>with you.</p>
+      <div class="hero-copy">
+        <h1 class="hero-eyebrow">Fashion<br> that moves<br> with you.</h1>
         <span class="rule" aria-hidden="true"></span>
       </div>
 
-      <h1 class="hero-word" aria-label="Gazu">Gazu</h1>
+      <div class="hero-slides" aria-live="off">
 
-      <div class="hero-model">
-        <img src="assets/hero.jpg" alt="Model wearing an oversized black blazer and boots against a pale studio backdrop." loading="eager" width="1400" height="1867">
+        <article class="slide is-active" data-domain="men" style="--focus: 52% 42%" aria-roledescription="slide" aria-label="1 of 3: Men">
+          <div class="slide-word"><p class="slide-word-text" aria-hidden="true">men</p></div>
+          <figure class="slide-media">
+            <img src="assets/p5.jpg" alt="Man in a black tailored jacket worn open, one arm raised, against a grey studio wall." width="1800" height="2700" loading="eager">
+          </figure>
+          <div class="product-card">
+            <p class="pc-kicker">Men &middot; New in</p>
+            <h2 class="pc-name">Soft Tailored Jacket</h2>
+            <div class="pc-row">
+              <p class="pc-meta"><span class="pc-price">&#8377;6,240</span><span class="pc-swatch"><i style="--sw:#1C1C1C" aria-hidden="true"></i>Onyx</span></p>
+              <button class="pc-toggle" type="button" aria-expanded="false" aria-controls="sizes-men" aria-label="Choose a size for the Soft Tailored Jacket">
+                <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+              </button>
+            </div>
+            <div class="pc-sizes" id="sizes-men" hidden>
+              <fieldset>
+                <legend>Size</legend>
+                <div class="size-list">
+                  <label class="size-opt"><input type="radio" name="size-men" value="XS"><span>XS</span></label>
+                  <label class="size-opt"><input type="radio" name="size-men" value="S"><span>S</span></label>
+                  <label class="size-opt"><input type="radio" name="size-men" value="M"><span>M</span></label>
+                  <label class="size-opt"><input type="radio" name="size-men" value="L"><span>L</span></label>
+                  <label class="size-opt"><input type="radio" name="size-men" value="XL"><span>XL</span></label>
+                </div>
+              </fieldset>
+              <button class="btn btn-accent pc-add" type="button">Add to bag</button>
+              <p class="pc-msg" role="status"></p>
+            </div>
+          </div>
+        </article>
+
+        <article class="slide" data-domain="women" style="--focus: 50% 40%" aria-roledescription="slide" aria-label="2 of 3: Women" hidden>
+          <div class="slide-word"><p class="slide-word-text" aria-hidden="true">women</p></div>
+          <figure class="slide-media">
+            <img src="assets/hero.jpg" alt="Model wearing an oversized black blazer and boots against a pale studio backdrop." width="1400" height="1911" loading="eager">
+          </figure>
+          <div class="product-card">
+            <p class="pc-kicker">Women &middot; New in</p>
+            <h2 class="pc-name">Sharp Shoulder Blazer</h2>
+            <div class="pc-row">
+              <p class="pc-meta"><span class="pc-price">&#8377;5,980</span><span class="pc-swatch"><i style="--sw:#0D0D0D" aria-hidden="true"></i>Black</span></p>
+              <button class="pc-toggle" type="button" aria-expanded="false" aria-controls="sizes-women" aria-label="Choose a size for the Sharp Shoulder Blazer">
+                <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+              </button>
+            </div>
+            <div class="pc-sizes" id="sizes-women" hidden>
+              <fieldset>
+                <legend>Size</legend>
+                <div class="size-list">
+                  <label class="size-opt"><input type="radio" name="size-women" value="XS"><span>XS</span></label>
+                  <label class="size-opt"><input type="radio" name="size-women" value="S"><span>S</span></label>
+                  <label class="size-opt"><input type="radio" name="size-women" value="M"><span>M</span></label>
+                  <label class="size-opt"><input type="radio" name="size-women" value="L"><span>L</span></label>
+                  <label class="size-opt"><input type="radio" name="size-women" value="XL"><span>XL</span></label>
+                </div>
+              </fieldset>
+              <button class="btn btn-accent pc-add" type="button">Add to bag</button>
+              <p class="pc-msg" role="status"></p>
+            </div>
+          </div>
+        </article>
+
+        <!-- PLACEHOLDER PRODUCT: the catalogue has no kids item yet. Name, price
+             and colour below are stand-ins; replace with the real product. -->
+        <article class="slide" data-domain="kids" style="--focus: 48% 62%" aria-roledescription="slide" aria-label="3 of 3: Kids" hidden>
+          <div class="slide-word"><p class="slide-word-text" aria-hidden="true">kids</p></div>
+          <figure class="slide-media">
+            <img src="assets/cat-kids.jpg" alt="Child in a black graphic T-shirt and braces, wearing a red and black cap, against a dark red backdrop." width="500" height="781" loading="eager">
+          </figure>
+          <div class="product-card">
+            <p class="pc-kicker">Kids &middot; New in</p>
+            <h2 class="pc-name">Graphic Crew Tee</h2>
+            <div class="pc-row">
+              <p class="pc-meta"><span class="pc-price">&#8377;990</span><span class="pc-swatch"><i style="--sw:#0D0D0D" aria-hidden="true"></i>Black</span></p>
+              <button class="pc-toggle" type="button" aria-expanded="false" aria-controls="sizes-kids" aria-label="Choose a size for the Graphic Crew Tee">
+                <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+              </button>
+            </div>
+            <div class="pc-sizes" id="sizes-kids" hidden>
+              <fieldset>
+                <legend>Age</legend>
+                <div class="size-list">
+                  <label class="size-opt"><input type="radio" name="size-kids" value="4Y"><span>4Y</span></label>
+                  <label class="size-opt"><input type="radio" name="size-kids" value="6Y"><span>6Y</span></label>
+                  <label class="size-opt"><input type="radio" name="size-kids" value="8Y"><span>8Y</span></label>
+                  <label class="size-opt"><input type="radio" name="size-kids" value="10Y"><span>10Y</span></label>
+                  <label class="size-opt"><input type="radio" name="size-kids" value="12Y"><span>12Y</span></label>
+                </div>
+              </fieldset>
+              <button class="btn btn-accent pc-add" type="button">Add to bag</button>
+              <p class="pc-msg" role="status"></p>
+            </div>
+          </div>
+        </article>
+
       </div>
 
-      <div class="hero-actions reveal">
-        <a class="btn" href="#products">Shop now</a>
+      <div class="hero-actions">
+        <a class="btn btn-accent" href="#" data-hero-cta>Shop men</a>
         <a class="link-underline" href="#new-season">Explore new in</a>
       </div>
 
-      <div class="hero-collection reveal">
-        <p class="eyebrow">New<br>Collection</p>
-        <span class="rule" aria-hidden="true"></span>
+      <div class="hero-controls" aria-label="Slideshow controls" role="group">
+        <span class="hero-count" data-hero-count>01 / 03</span>
+        <span class="hero-progress" data-hero-progress aria-hidden="true"><i></i></span>
+        <button class="hero-btn" type="button" data-hero-prev aria-label="Previous product">
+          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <button class="hero-btn hero-btn--solid" type="button" data-hero-next-btn aria-label="Next product">
+          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+        </button>
+        <button class="hero-btn" type="button" data-hero-pause aria-label="Pause slideshow">
+          <svg class="ico ico-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg>
+          <svg class="ico ico-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10-6.5z"/></svg>
+        </button>
       </div>
+
+      <button class="hero-next" type="button" data-hero-next aria-label="Next product: women">
+        <img src="assets/hero.jpg" alt="" width="1400" height="1911">
+        <span class="hero-next-text">
+          <span class="hero-next-kicker">Next</span>
+          <span class="hero-next-label" data-hero-next-label>women</span>
+        </span>
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
 
     </div>
   </section>
